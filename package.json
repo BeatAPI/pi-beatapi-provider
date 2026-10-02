@@ -1,13 +1,23 @@
 {
   "name": "pi-beatapi-provider",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "BeatAPI text-model provider for the Pi coding agent",
   "license": "MIT",
   "type": "module",
-  "keywords": ["pi-package", "pi", "beatapi", "provider"],
-  "files": ["src", "README.md"],
+  "keywords": [
+    "pi-package",
+    "pi",
+    "beatapi",
+    "provider"
+  ],
+  "files": [
+    "src",
+    "README.md"
+  ],
   "pi": {
-    "extensions": ["./src/index.ts"]
+    "extensions": [
+      "./src/index.ts"
+    ]
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*"
@@ -19,9 +29,13 @@
   },
   "scripts": {
     "check": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "engines": {
     "node": ">=22.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeatAPI/pi-beatapi-provider.git"
   }
 }
