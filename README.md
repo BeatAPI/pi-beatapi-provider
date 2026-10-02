@@ -1,30 +1,30 @@
 # Pi BeatAPI Provider
 
-Installable Pi extension that registers BeatAPI's GPT-5.6 Sol, Terra, and Luna
-text models over the OpenAI Responses API. The extension reads
-`BEATAPI_API_KEY` from the environment; it neither stores nor logs the key.
+The extension discovers the gateway's current public text models, base-tier retail
+prices, context windows and output limits through `GET /v1/text/models`. New
+models appear without another package release. Models with OpenAI and Anthropic
+endpoints use Pi's native Responses, Chat Completions or Messages adapter as declared by the gateway.
 
-This is a scoped first release. It does not auto-discover all account-enabled
-models, offer `/login`, or expose BeatAPI's Data/Tool APIs as Pi tools.
-
-## Install and run
-
-```bash
-export BEATAPI_API_KEY="<your private BeatAPI key>"
+```sh
 pi install git:github.com/BeatAPI/pi-beatapi-provider
-pi --provider beatapi --model gpt-5.6-terra
+pi --provider beatapi --model gpt-6.1-sol
 ```
 
-Before choosing a model, confirm the exact ID is enabled for your account with
-`GET https://api.beatapi.io/v1/models`. For local checkout testing, run
-`pi -e . --list-models beatapi` from this repo with `BEATAPI_API_KEY` set.
+Configure `BEATAPI_API_KEY` privately in your environment; the provider uses it
+only for generation. Model discovery is anonymous. A public model may still be
+unavailable to your key's group or balance; account routing is authoritative.
 
-Pi's displayed cost is an estimate using BeatAPI's 2026-09-23 base-tier USD
-price snapshot per million tokens. The GPT-5.6 family has a higher price tier
-above 272K input tokens that Pi's single `cost` row cannot represent. Pricing
-may change; [current BeatAPI pricing](https://beatapi.io/pricing) and the BeatAPI
-usage ledger are the source of truth. No model is claimed to be free.
+The catalogue refreshes at extension startup and through Pi's provider model
+refresh interface. Failed refreshes do not return an empty list over a working
+catalogue; offline startup registers no models until discovery succeeds.
+Unsupported endpoint families are omitted rather than routed through a guessed
+protocol. The extension does not expose BeatAPI data or Web tools in Pi.
 
-Pi executes extensions with local user permissions. Review this package's
-source before installation. It only registers a provider and does not perform
-network requests at startup.
+Pi's cost display is an estimate: the gateway publishes base-tier input/output
+rates, but not cache rates or long-context price tiers. Missing rates and cache
+estimates are displayed as zero, which does not claim that calls are free. Actual
+charges come from BeatAPI usage. Unknown context/output limits fall back to
+128K/32K until the gateway provides them. Discovery never sends an API key.
+
+Local validation: `npm ci`, `npm run check`, `npm test`, `npm pack --dry-run`.
+Install from GitHub; no npm release is assumed.
